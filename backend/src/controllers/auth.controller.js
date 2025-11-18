@@ -48,8 +48,8 @@ export async function signup(req,res) {
         res.cookie('jwt' , token, {
             maxAge : 7*24*60*60*1000,
             httpOnly : true,
-            sameSite : 'strict',
-            secure : process.env.NODE_ENV === 'production'
+            sameSite : 'none',
+            secure : true
         })
         res.status(201).json({success:true, user:newUser})
 
@@ -73,12 +73,22 @@ export async function login(req,res) {
         if(!isPasswordMatched){
             return res.status(401).json({message : "Invalid Email or Password"})
         }
+        try {
+            await upsertStreamUser({
+                id : user._id.toString(),
+                name : user.fullName,
+                image : user.profilePic || ""
+            })
+            console.log(`Stream user synced on login for ${user.fullName}`)
+        } catch (streamError) {
+            console.log("Error creating stream user on login:", streamError.message)
+        }
         const token = jwt.sign({userId : user._id}, process.env.JWT_SECRET_KEY, {expiresIn:'7d'})
         res.cookie('jwt' , token, {
             maxAge : 7*24*60*60*1000,
             httpOnly : true,
-            sameSite : 'strict',
-            secure : process.env.NODE_ENV === 'production'
+            sameSite : 'none',
+            secure : true
         })
         res.status(200).json({success:true, user})
     } catch (error) {

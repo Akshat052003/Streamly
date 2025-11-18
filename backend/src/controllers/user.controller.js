@@ -86,7 +86,7 @@ export async function acceptFriendRequest(req, res) {
             return res.status(403).json({message : "You are not authorized to accept this friend request"})
         }
 
-        friendRequest.status = "acccepted"
+        friendRequest.status = "accepted"
         await friendRequest.save()
 
         // add each user to the other's friends list

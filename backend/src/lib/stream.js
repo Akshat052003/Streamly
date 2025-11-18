@@ -1,13 +1,16 @@
 import {StreamChat} from 'stream-chat';
 import "dotenv/config"
 
-const apiKey = process.env.STEAM_API_KEY
-const apiSecret = process.env.STEAM_API_SECRET
+const apiKey = process.env.STREAM_API_KEY
+const apiSecret = process.env.STREAM_API_SECRET
+console.log("Backend Stream API Key:", apiKey)
 
 if(!apiKey || !apiSecret){
     console.error("Stream API key and secret are missing")
 }
 const streamClient = StreamChat.getInstance(apiKey, apiSecret)
+
+
 
 export const upsertStreamUser = async(userData) => {
     try {
@@ -21,8 +24,8 @@ export const upsertStreamUser = async(userData) => {
 }
 export const generateStreamToken = (userId) => {
     try {
-        const usedIdStr = userId.toString()
-        return streamClient.createToken(usedIdStr)
+        const userIdStr = userId.toString()
+        return streamClient.createToken(userIdStr)
     } catch (error) {
         console.log("Error generating stream token : " , error)
         
