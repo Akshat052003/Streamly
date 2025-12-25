@@ -1,5 +1,5 @@
 import express from 'express'
-import { login, logout, onboard, signup } from '../controllers/auth.controller.js'
+import { forgotPassword, login, logout, onboard, resendOTP, resetPassword, signup, verifyOTP } from '../controllers/auth.controller.js'
 import { protectRoute } from '../middleware/auth.middleware.js'
 
 const router = express.Router()
@@ -15,5 +15,13 @@ router.post('/onboarding' , protectRoute, onboard)
 router.get("/me" , protectRoute , (req,res) => {
     res.status(200).json({success:true , user : req.user})
 })
+
+router.post("/forgot-password" , forgotPassword)
+
+router.post("/verify-otp", verifyOTP)
+
+router.post("/reset-password" , resetPassword)
+
+router.post("/resend-otp", resendOTP)
 
 export default router

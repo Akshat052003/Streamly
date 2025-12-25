@@ -15,6 +15,12 @@ export const logout = async () => {
   return response.data;
 };
 
+export const forgotPassword = async (email) => {
+  const response = await axiosInstance.post("/auth/forgot-password", {email})
+  return response.data
+}
+
+
 export const getAuthUser = async () => {
   try {
     const res = await axiosInstance.get("/auth/me");

@@ -43,7 +43,15 @@ const userSchema = new mongoose.Schema({
     friends: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-    }]
+    }],
+    resetPasswordOtp : {
+        type: String,
+        default : null
+    },
+    resetPasswordOtpExpires : {
+        type : Date,
+        default : null
+    }
 }, { timestamps: true });
 
 // Pre-save hook for hashing password
@@ -62,6 +70,29 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
     const isPasswordMatched = await bcrypt.compare(enteredPassword, this.password);
     return isPasswordMatched;
     
+}
+
+userSchema.methods.generateOTP = async () => {
+    const otp = Math.floor(10000 + Math.random() * 900000).toString()
+    this.resetPasswordOtp = otp
+    this.resetPasswordOtpExpires = Date.now() + 10 * 60 * 1000
+    return otp
+}
+
+userSchema.methods.verifyOTP = async (otp) => {
+    if(!this.resetPasswordOtp || !this.resetPasswordOtpExpires){
+        return false
+    }
+    if(Date.now() > this.resetPasswordOtpExpires){
+        return false;
+    }
+    return this.resetPasswordOtp === otp;
+
+}
+
+userSchema.methods.clearOTP = () => {
+    this.resetPasswordOtp = null
+    this.resetPasswordOtpExpires = null
 }
 
 const User = mongoose.model("User", userSchema);

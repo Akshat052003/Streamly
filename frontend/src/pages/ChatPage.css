@@ -1,0 +1,22 @@
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c7d2fe;
+  border-radius: 10px;
+}
+
+/* Message bubbles */
+.str-chat__message-simple__text {
+  background: #f0f0f0 !important;
+  border-radius: 16px !important;
+  padding: 8px 12px !important;
+  max-width: 80%;
+}
+
+.str-chat__message-simple--me .str-chat__message-simple__text {
+  background: #d1fae5 !important; /* Light green (WhatsApp-like) */
+  margin-left: auto !important;
+  text-align: right;
+}
